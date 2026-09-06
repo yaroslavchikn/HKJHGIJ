@@ -5,6 +5,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -56,7 +57,9 @@ fun VaultScreen(
 
     val deleteLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
-    ) { }
+    ) { result ->
+        // Можно добавить логирование, если захочется
+    }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -67,7 +70,10 @@ fun VaultScreen(
 
                 is VaultViewModel.VaultEvent.DeleteOriginals -> {
                     DeleteOriginalHelper.requestDelete(context, event.uris) { sender ->
-                        runCatching { deleteLauncher.launch(sender) }
+                        runCatching {
+                            val request = IntentSenderRequest.Builder(sender).build()
+                            deleteLauncher.launch(request)
+                        }
                     }
                 }
             }
