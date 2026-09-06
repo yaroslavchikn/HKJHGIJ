@@ -150,7 +150,7 @@ class VaultRepository(private val context: Context) {
             context,
             file,
             masterKey,
-            EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_1MB
+            EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
         ).build()
     }
 
